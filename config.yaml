@@ -30,10 +30,10 @@ auto_name:
   command: omp-fs -p
 
 # Statut lisible d'un coup d'oeil dans la barre de fenetres et dans la sidebar :
-# triangle jaune en cours, rond rouge attend une reponse, coche verte termine.
+# rond jaune en cours, triangle rouge attend une reponse, coche verte termine.
 status_icons:
-  working: "#[fg=#f9e2af]▲#[fg=default]"
-  waiting: "#[fg=#f38ba8]●#[fg=default]"
+  working: "#[fg=#f9e2af]●#[fg=default]"
+  waiting: "#[fg=#f38ba8]▲#[fg=default]"
   done: "#[fg=#a6e3a1]✔#[fg=default]"
 
 # Le dashboard est une popup `-E` (Ctrl-b g) : sans ca elle reste au-dessus du
