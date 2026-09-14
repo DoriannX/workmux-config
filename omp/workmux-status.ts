@@ -42,15 +42,30 @@ export default function (pi: ExtensionAPI) {
   // `waiting` vient du seul vrai cas d'attente (l'outil `ask`), `done` de
   // `agent_end`.
 
+  // Un `ask` en cours garde la fenetre en `waiting` : `tool_execution_start`
+  // suit immediatement `tool_call` et reposait `working` par-dessus, donc la
+  // question n'etait jamais signalee.
+  let askPending = false;
+
   pi.on("tool_call", async (event) => {
     if (event.toolName === "ask") {
+      askPending = true;
       await setStatus("waiting");
     } else {
       await setStatus("working");
     }
   });
 
-  pi.on("tool_execution_start", async () => {
+  pi.on("tool_result", async (event) => {
+    if (event.toolName === "ask") {
+      askPending = false;
+    }
+  });
+
+  pi.on("tool_execution_start", async (event) => {
+    if (askPending || event.toolName === "ask") {
+      return;
+    }
     await setStatus("working");
   });
 
