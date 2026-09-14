@@ -50,6 +50,7 @@ install_file() {
 install_file config.yaml "$config_home/workmux/config.yaml"
 install_file shell/keys.fish "$config_home/fish/conf.d/keys.fish"
 install_file omp/workmux-status.ts "$HOME/.omp/agent/extensions/workmux-status.ts"
+install_file omp/skills/merge-wt/SKILL.md "$HOME/.omp/agent/skills/merge-wt/SKILL.md"
 
 # tmux ne sait pas inclure un fragment tout seul : on ajoute la ligne source-file
 # a ~/.tmux.conf si elle n'y est pas deja.

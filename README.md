@@ -8,6 +8,8 @@ Configuration de travail de Doriann autour de [workmux](https://workmux.raine.de
 | `shell/keys.fish` | `${XDG_CONFIG_HOME:-~/.config}/fish/conf.d/keys.fish` |
 | `omp/workmux-status.ts` | `~/.omp/agent/extensions/workmux-status.ts` |
 | `tmux/workmux.conf` | charge par une ligne `source-file` ajoutee a `~/.tmux.conf` |
+| `omp/skills/merge-wt/SKILL.md` | `~/.omp/agent/skills/merge-wt/SKILL.md` — commande `/merge-wt` : merge le worktree courant, sans commiter ni pousser |
+| `docs/options.md` | reference : toutes les options workmux passees en revue, retenues et ecartees, avec la raison |
 
 ## Installation
 
