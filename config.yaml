@@ -41,6 +41,12 @@ status_icons:
 dashboard:
   close_on_jump: true
 
+# Ordre des lignes de la sidebar : l'ordre des fenetres tmux, donc l'ordre de
+# creation avec `window_placement: rightmost`. Le defaut `recency` reclasse a
+# chaque changement de statut et les lignes bougent sous le curseur.
+sidebar:
+  sort: window
+
 # `.omp/` est gitignore, donc absent d'un worktree neuf : sans lien les releves
 # de quota repartent de zero par worktree et meurent au `workmux remove`.
 files:

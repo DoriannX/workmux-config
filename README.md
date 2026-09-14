@@ -1,16 +1,23 @@
 # workmux-config
 
-Configuration globale [workmux](https://workmux.raine.dev) de Doriann, pour la reposer telle quelle sur une autre machine.
+Configuration de travail de Doriann autour de [workmux](https://workmux.raine.dev) : config globale, bindings tmux, touches du shell, extension de suivi de statut omp. De quoi reposer le meme poste ailleurs.
+
+| Fichier | Destination |
+| --- | --- |
+| `config.yaml` | `${XDG_CONFIG_HOME:-~/.config}/workmux/config.yaml` |
+| `shell/keys.fish` | `${XDG_CONFIG_HOME:-~/.config}/fish/conf.d/keys.fish` |
+| `omp/workmux-status.ts` | `~/.omp/agent/extensions/workmux-status.ts` |
+| `tmux/workmux.conf` | charge par une ligne `source-file` ajoutee a `~/.tmux.conf` |
 
 ## Installation
 
 ```bash
 git clone https://github.com/DoriannX/workmux-config.git ~/projects/workmux-config
-~/projects/workmux-config/install.sh          # lien symbolique (recommande)
-~/projects/workmux-config/install.sh --copy   # copie simple
+~/projects/workmux-config/install.sh          # liens symboliques (recommande)
+~/projects/workmux-config/install.sh --copy   # copies simples
 ```
 
-Le lien pointe `${XDG_CONFIG_HOME:-~/.config}/workmux/config.yaml` vers `config.yaml` du depot : un `git pull` met la machine a jour. Une config deja presente est sauvegardee en `config.yaml.bak.<horodatage>` avant remplacement.
+Avec des liens, un `git pull` ici met la machine a jour. Tout fichier deja present est sauvegarde en `<nom>.bak.<horodatage>` avant remplacement.
 
 ## Ce que contient la config, et pourquoi
 
@@ -23,9 +30,18 @@ Le lien pointe `${XDG_CONFIG_HOME:-~/.config}/workmux/config.yaml` vers `config.
 | `panes` | Un seul pane, l'agent en pleine largeur. `Ctrl-b %` pour un shell ponctuel. |
 | `window_placement: rightmost` | Les fenetres s'ajoutent au bout : leur position reste l'ordre de creation. |
 | `auto_name.command` | `workmux add -A "<description>"` nomme la branche par LLM. La commande est ecrite en clair parce que la resolution automatique ne connait que l'agent `omp`, pas le profil nomme `omp-fs`, et retomberait sur le CLI `llm`. |
-| `status_icons` | Jaune en cours, rouge attend une reponse, vert termine, dans la barre de fenetres et la sidebar. |
+| `status_icons` | `●` jaune en cours, `▲` rouge attend une reponse, `✔` vert termine, dans la barre de fenetres et la sidebar. |
 | `dashboard.close_on_jump` | Le dashboard est ouvert en popup `-E` : sans ca il reste au-dessus du pane vise. |
+| `sidebar.sort: window` | Ordre des fenetres tmux, donc ordre de creation. Le defaut `recency` reclasse a chaque changement de statut et les lignes bougent sous le curseur. |
 | `files.symlink` | Partage les releves de quota omp entre worktrees (`.omp/` est gitignore, donc absent d'un worktree neuf). Chemin absent d'un depot ? workmux l'ignore sans erreur. |
+
+## Ctrl-Backspace supprime le mot precedent
+
+Windows Terminal envoie l'octet `0x08` pour Ctrl-Backspace et `0x7F` pour Backspace seul. omp lie deja l'action `tui.editor.deleteWordBackward` a `Ctrl+W`, `Alt+Backspace` et `Ctrl+Backspace`, mais il ne traite `0x08` comme Ctrl-Backspace que **hors multiplexeur** — dans tmux il n'effacait donc qu'un caractere. `shell/keys.fish` pose `PI_TUI_RAW_BACKSPACE_IS_CTRL=1` (et `tmux/workmux.conf` le repose via `set-environment -g`, pour les panes qui ne passent pas par le shell), plus `bind \b backward-kill-word` parce que fish a le meme defaut.
+
+## Extension de suivi de statut omp
+
+`omp/workmux-status.ts` remplace celle que pose `workmux setup`. La version d'origine marquait `waiting` sur `message_end` : or un message d'assistant qui porte des appels d'outils se termine **au milieu** du tour, et workmux rend `waiting`/`done` collants jusqu'a ce qu'on focalise le pane. La fenetre restait donc marquee « attend une reponse » pendant tout le travail. Ici `waiting` ne vient plus que de l'outil `ask`, et `done` de `agent_end`.
 
 ## Prerequis par machine
 
@@ -36,9 +52,4 @@ Le lien pointe `${XDG_CONFIG_HOME:-~/.config}/workmux/config.yaml` vers `config.
 
 ## Bindings tmux qui vont avec
 
-```tmux
-# Ctrl-b g : dashboard en fenetre flottante par-dessus le pane courant.
-bind-key g display-popup -E -w 90% -h 90% "$HOME/.local/bin/workmux dashboard"
-# Ctrl-b G : colonne d'etat permanente des worktrees (bascule).
-bind-key G run-shell "$HOME/.local/bin/workmux sidebar"
-```
+Poses par `tmux/workmux.conf` : `Ctrl-b g` ouvre le dashboard en fenetre flottante, `Ctrl-b G` bascule la colonne d'etat des worktrees.
