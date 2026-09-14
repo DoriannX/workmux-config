@@ -1,0 +1,48 @@
+# Configuration globale workmux — voir https://workmux.raine.dev/guide/configuration/
+# Ta ligne de statut omp rend deja des glyphes nerd font dans ce terminal.
+nerdfont: true
+
+# Build fullscreen du fork DoriannX/oh-my-pi, compile pour linux-x64 dans
+# ~/.local/opt/omp-fs. `type: omp` garde l'injection de prompt, les flags
+# continue/resume et le suivi de statut de l'omp standard.
+agents:
+  omp-fs:
+    type: omp
+    command: omp-fs
+
+agent: omp-fs
+base_branch: auto
+merge_strategy: rebase
+
+# Un seul pane : l'agent en pleine largeur. Ctrl-b % ouvre un shell ponctuel.
+panes:
+  - command: <agent>
+    focus: true
+
+# Les nouvelles fenetres s'ajoutent au bout : la position d'une fenetre dans la
+# barre reste son ordre de creation, donc Ctrl-b <numero> est memorisable.
+window_placement: rightmost
+
+# `workmux add -A "<description>"` nomme la branche par LLM. La commande est
+# ecrite en clair parce que la resolution automatique ne connait que l'agent
+# `omp`, pas le profil nomme `omp-fs`, et retomberait sur le CLI `llm` absent.
+auto_name:
+  command: omp-fs -p
+
+# Statut lisible d'un coup d'oeil dans la barre de fenetres et dans la sidebar :
+# jaune en cours, rouge attend une reponse, vert termine.
+status_icons:
+  working: "#[fg=#f9e2af]●#[fg=default]"
+  waiting: "#[fg=#f38ba8]▲#[fg=default]"
+  done: "#[fg=#a6e3a1]✔#[fg=default]"
+
+# Le dashboard est une popup `-E` (Ctrl-b g) : sans ca elle reste au-dessus du
+# pane sur lequel on vient de sauter.
+dashboard:
+  close_on_jump: true
+
+# `.omp/` est gitignore, donc absent d'un worktree neuf : sans lien les releves
+# de quota repartent de zero par worktree et meurent au `workmux remove`.
+files:
+  symlink:
+    - .omp/agent/quota-samples
