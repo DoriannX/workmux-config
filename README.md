@@ -30,7 +30,7 @@ Avec des liens, un `git pull` ici met la machine a jour. Tout fichier deja prese
 | `panes` | Un seul pane, l'agent en pleine largeur. `Ctrl-b %` pour un shell ponctuel. |
 | `window_placement: rightmost` | Les fenetres s'ajoutent au bout : leur position reste l'ordre de creation. |
 | `auto_name.command` | `workmux add -A "<description>"` nomme la branche par LLM. La commande est ecrite en clair parce que la resolution automatique ne connait que l'agent `omp`, pas le profil nomme `omp-fs`, et retomberait sur le CLI `llm`. |
-| `status_icons` | `●` jaune en cours, `▲` rouge attend une reponse, `✔` vert termine, dans la barre de fenetres et la sidebar. |
+| `status_icons` | `▲` jaune en cours, `●` rouge attend une reponse, `✔` vert termine, dans la barre de fenetres et la sidebar. |
 | `dashboard.close_on_jump` | Le dashboard est ouvert en popup `-E` : sans ca il reste au-dessus du pane vise. |
 | `sidebar.sort: window` | Ordre des fenetres tmux, donc ordre de creation. Le defaut `recency` reclasse a chaque changement de statut et les lignes bougent sous le curseur. |
 | `files.symlink` | Partage les releves de quota omp entre worktrees (`.omp/` est gitignore, donc absent d'un worktree neuf). Chemin absent d'un depot ? workmux l'ignore sans erreur. |
