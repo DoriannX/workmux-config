@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Popup Ctrl-b A : demande le prompt, puis `workmux add -A` qui fait nommer la
+# branche par le LLM (auto_name.command dans config.yaml).
+#
+# Pourquoi un script et pas `command-prompt -p ... "run-shell 'workmux add -A -p %%'"` :
+# tmux substitue %% textuellement dans la commande, donc la moindre apostrophe
+# d'un prompt en francais ("l'ecran", "n'affiche pas") casse le quoting.
+# Ici le prompt reste une variable shell, jamais reparse.
+set -uo pipefail
+
+workmux=$HOME/.local/bin/workmux
+
+printf 'Nouveau worktree — decris la tache (Entree pour valider, Ctrl-C pour annuler)\n> '
+IFS= read -r -e prompt || exit 0
+[[ -n ${prompt//[[:space:]]/} ]] || exit 0
+
+"$workmux" add -A -p "$prompt" "$@" && exit 0
+
+# La popup `-E` se ferme des la fin de la commande : sans cette pause, l'erreur
+# de workmux disparait avant d'etre lue.
+printf '\nEchec de workmux add. Entree pour fermer.'
+read -r _
+exit 1

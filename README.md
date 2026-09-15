@@ -54,4 +54,4 @@ Windows Terminal envoie l'octet `0x08` pour Ctrl-Backspace et `0x7F` pour Backsp
 
 ## Bindings tmux qui vont avec
 
-Poses par `tmux/workmux.conf` : `Ctrl-b g` ouvre le dashboard en fenetre flottante, `Ctrl-b G` bascule la colonne d'etat des worktrees.
+Poses par `tmux/workmux.conf` : `Ctrl-b g` ouvre le dashboard en fenetre flottante, `Ctrl-b G` bascule la colonne d'etat des worktrees, `Ctrl-b A` demande un prompt en popup puis cree le worktree avec `workmux add -A` (branche nommee par le LLM, via `bin/workmux-add-auto`).
