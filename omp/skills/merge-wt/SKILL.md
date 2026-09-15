@@ -1,6 +1,6 @@
 ---
 name: merge-wt
-description: Merge le worktree courant dans sa branche de base avec workmux, puis nettoie worktree, fenêtre tmux et branche. À utiliser quand Doriann dit de merger, de fusionner, de clore le worktree ou la branche courante. Ne commite rien et ne pousse rien.
+description: Merge le worktree courant dans sa branche de base avec workmux, puis nettoie worktree, fenêtre tmux et branche. À utiliser quand Doriann dit de merger, de fusionner, de clore le worktree ou la branche courante. Ne commite et ne pousse qu'après un oui explicite.
 disable-model-invocation: true
 allowed-tools: Bash
 ---
@@ -11,6 +11,6 @@ Merge le worktree depuis lequel la commande est lancée. `workmux merge` sans no
 
 Arguments : `$ARGUMENTS` — passer `--keep` tel quel s'il est présent (garde worktree, fenêtre et branche après le merge).
 
-1. `git status --porcelain`. Si l'arbre n'est pas propre, **s'arrêter** : lister les fichiers et demander à Doriann s'il veut commiter d'abord. Ne jamais commiter d'initiative.
+1. `git status --porcelain`. Si l'arbre n'est pas propre, **s'arrêter** : lister les fichiers et demander à Doriann s'il veut commiter d'abord, en proposant le message en brouillon. Ne jamais commiter d'initiative.
 2. `workmux merge` (plus `--keep` si demandé).
-3. Rendre compte en une phrase : branche mergée, cible, et si `main` est en avance sur `origin` — sans pousser.
+3. Rendre compte en une phrase : branche mergée, cible, et si `main` est en avance sur `origin`. Ne pousser qu'après un oui explicite de Doriann ; le proposer si `main` est en avance.
